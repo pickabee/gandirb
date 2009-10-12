@@ -1,0 +1,32 @@
+= Gandirb - Ruby lib for using Gandi XML-RPC API
+
+This is a ruby library for using Gandi XML-RPC API.
+It should only support the domain and mail API, but may be extensible enough to add hosting in the future.
+
+== Howto
+
+See http://wiki.gandi.net/fr/api-xml/docs/domain for the full documentation on the API.
+Note the session_id doesn't have to be explicitly provided when calling a method.
+
+It should also be noted that the ruby xml-rpc lib seems to have a bug with the ssl support, resulting in a timeout of 15 seconds.
+After this time the current connection won't work and result in various exception (EOFError, Errno::EPIPE, OpenSSL::SSL::SSLError).
+This lib takes this issue into account and provides a workaround (restarting the connection whenever this happens, if necessary).
+
+Quick example :
+
+gandi_session = Gandi::Domain.login 'XXYYY-Gandi', 'mypasswd', Gandi::Domain::TEST_URL #omit the last param for real url
+gandi_session.account_currency # => "EUR"
+gandi_session.domain_available ["mycoolwebsite.com"] # => {"mycoolwebsite.com"=>true}
+gandi_session.domain_list # => ["mypersonalwebsite.com"]
+
+Full RDOC documentation to come.
+
+== TODO
+
+* Tests
+* Finish adding and cleaning up domain methods (limit class_eval usage)
+
+== Copyright
+
+Copyright (c) 2009 Pickabee. Released under the MIT licence, see LICENSE for details.
+Some parts inspired by http://github.com/jerome/gandi/tree
