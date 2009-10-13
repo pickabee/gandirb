@@ -9,22 +9,24 @@ See http://wiki.gandi.net/fr/api-xml/docs/domain for the full documentation on t
 Note the session_id doesn't have to be explicitly provided when calling a method.
 
 It should also be noted that the ruby xml-rpc lib seems to have a bug with the ssl support, resulting in a timeout of 15 seconds.
-After this time the current connection won't work and result in various exception (EOFError, Errno::EPIPE, OpenSSL::SSL::SSLError).
-This lib takes this issue into account and provides a workaround (restarting the connection whenever this happens, if necessary).
+After this time the current connection won't work and result in various exception. 
+This lib takes this issue into account and provides a workaround by restarting the connection. See the code comments for more details.
 
 Quick example :
 
 gandi_session = Gandi::Domain.login 'XXYYY-Gandi', 'mypasswd', Gandi::Domain::TEST_URL #omit the last param for real url
 gandi_session.account_currency # => "EUR"
 gandi_session.domain_available ["mycoolwebsite.com"] # => {"mycoolwebsite.com"=>true}
+gandi_session.domain_available "mycoolwebsite.com" # => true #rubyfied syntax
 gandi_session.domain_list # => ["mypersonalwebsite.com"]
 
-Full RDOC documentation to come.
+Detailed RDoc documentation for each method is available using rake rdoc.
 
 == TODO
 
 * Tests
-* Finish adding and cleaning up domain methods (limit class_eval usage)
+* Finish adding and cleaning up domain and mail methods
+* Gemification (with Jeweler)
 
 == Copyright
 

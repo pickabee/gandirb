@@ -81,7 +81,7 @@ module Gandi
     #In this case a server timeout of 12 hours (see the Gandi documentation) may be reached more easily and should be handled.
     def raw_call(*args)
       begin
-        raise "no connexion handler is set." unless @handler
+        raise "no connexion handler is set" unless @handler
         result = @handler.call(*args)
         @reconnected = false unless (args.first == 'login')
         return result
@@ -108,10 +108,10 @@ module Gandi
       @session_id.is_a? String
     end
     
-    def self.define_getter(method_name)
-      define_method(method_name) {
-        call(method_name)
-      }
+    #Raises a NoMethodError exception.
+    #Used for methods that are presents in the API but not yet available
+    def not_supported
+      raise NoMethodError.new "This method is not supported and will be available in v1.10"
     end
     
   end
