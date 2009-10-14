@@ -197,5 +197,37 @@ class DomainTest < ActiveSupport::TestCase
       assert @gandi_domain.host_delete(@sample_domain_name).is_a? Integer
     end
     
+    
+    should "list redirections for a domain" do
+      redirections = [{"type" => "http302", "from" => "w3.example.net", "to" => "http://www.example.net"}]
+      @gandi_domain.handler.expects(:call).with("domain_web_redir_list", @session_id, @sample_domain_name).returns(redirections)
+        
+      assert_equal redirections, @gandi_domain.domain_web_redir_list(@sample_domain_name)
+    end
+    
+    should "check redirection type when adding a redirection for a domain" do
+      fqdn = "w3.example.net"
+      destination_url = "http://www.example.net"
+      
+      calls = states('calls').starts_as('none')
+      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, fqdn, destination_url, 'http302').returns(rand(9000)).when(calls.is('none')).then(calls.is('first'))
+      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, fqdn, destination_url, 'http301').returns(rand(9000)).when(calls.is('first')).then(calls.is('second'))
+      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, fqdn, destination_url, 'cloak').returns(rand(9000)).when(calls.is('second'))
+      
+      Gandi::DomainModules::Redirection::DOMAIN_WEB_REDIR_REDIRECTION_TYPES.each do |type|
+        assert @gandi_domain.domain_web_redir_add(@sample_domain_name, fqdn, destination_url, type).is_a? Integer
+      end
+      
+      assert_raise ArgumentError do
+        @gandi_domain.domain_web_redir_add(@sample_domain_name, fqdn, destination_url, 'bad')
+      end
+    end
+    
+    should "delete the redirection on a fqdn" do
+      @gandi_domain.handler.expects(:call).with("domain_web_redir_del", @session_id, 'w3.example.net').returns(rand(9000))
+        
+      assert @gandi_domain.domain_web_redir_del('w3.example.net').is_a? Integer
+    end
+    
   end
 end

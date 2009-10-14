@@ -1,7 +1,6 @@
 module Gandi
   module DomainModules
     module NameServers
-      
       #Retrieve an array of name servers for a domain
       def domain_ns_list(domain)
         call('domain_ns_list', domain)

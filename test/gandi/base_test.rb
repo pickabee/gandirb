@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class BaseTest < ActiveSupport::TestCase
-  
   def setup
     @login = 'XX000-Gandi'
     @password = 'dummy'
@@ -186,5 +185,4 @@ class BaseTest < ActiveSupport::TestCase
       end
     end
   end
-  
 end

@@ -1,7 +1,6 @@
 module Gandi
   module DomainModules
     module Host
-      
       #Returns the array of glue records for the specified domain.
       def host_list(domain)
         call('host_list', domain)
@@ -25,7 +24,6 @@ module Gandi
       def host_delete(host)
         call('host_delete', host)
       end
-      
     end
   end
 end

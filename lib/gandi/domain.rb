@@ -1,6 +1,7 @@
 modules_directory = File.expand_path(File.dirname(__FILE__))
 require File.join(modules_directory, 'domain_modules/name_servers')
 require File.join(modules_directory, 'domain_modules/host')
+require File.join(modules_directory, 'domain_modules/redirection')
 
 module Gandi
   class Domain < Gandi::Base
@@ -125,6 +126,6 @@ module Gandi
     
     include Gandi::DomainModules::NameServers
     include Gandi::DomainModules::Host
-    
+    include Gandi::DomainModules::Redirection
   end
 end
