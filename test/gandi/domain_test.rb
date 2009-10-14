@@ -139,6 +139,31 @@ class DomainTest < ActiveSupport::TestCase
     end
     
     
+    should "list name servers for a domain" do
+      @gandi_domain.handler.expects(:call).with("domain_ns_list", @session_id, @sample_domain_name).returns([])
+        
+      assert @gandi_domain.domain_ns_list(@sample_domain_name).is_a? Array
+    end
+    
+    should "add name servers for a domain" do
+      @gandi_domain.handler.expects(:call).with("domain_ns_add", @session_id, @sample_domain_name, ['127.0.0.1']).returns(rand(9000))
+        
+      assert @gandi_domain.domain_ns_add(@sample_domain_name, ['127.0.0.1']).is_a? Integer
+    end
+    
+    should "remove name servers for a domain" do
+      @gandi_domain.handler.expects(:call).with("domain_ns_del", @session_id, @sample_domain_name, ['127.0.0.1']).returns(rand(9000))
+        
+      assert @gandi_domain.domain_ns_del(@sample_domain_name, ['127.0.0.1']).is_a? Integer
+    end
+    
+    should "set name servers for a domain" do
+      @gandi_domain.handler.expects(:call).with("domain_ns_set", @session_id, @sample_domain_name, ['127.0.0.1']).returns(rand(9000))
+        
+      assert @gandi_domain.domain_ns_set(@sample_domain_name, ['127.0.0.1']).is_a? Integer
+    end
+    
+    
     should "list hosts for a domain" do
       @gandi_domain.handler.expects(:call).with("host_list", @session_id, @sample_domain_name).returns([])
         

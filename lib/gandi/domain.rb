@@ -1,4 +1,5 @@
 modules_directory = File.expand_path(File.dirname(__FILE__))
+require File.join(modules_directory, 'domain_modules/name_servers')
 require File.join(modules_directory, 'domain_modules/host')
 
 module Gandi
@@ -122,6 +123,7 @@ module Gandi
       call('tld_list')
     end
     
+    include Gandi::DomainModules::NameServers
     include Gandi::DomainModules::Host
     
   end
