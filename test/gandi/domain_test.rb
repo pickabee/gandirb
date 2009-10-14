@@ -141,59 +141,59 @@ class DomainTest < ActiveSupport::TestCase
     
     should "list name servers for a domain" do
       @gandi_domain.handler.expects(:call).with("domain_ns_list", @session_id, @sample_domain_name).returns([])
-        
+      
       assert @gandi_domain.domain_ns_list(@sample_domain_name).is_a? Array
     end
     
     should "add name servers for a domain" do
       @gandi_domain.handler.expects(:call).with("domain_ns_add", @session_id, @sample_domain_name, ['127.0.0.1']).returns(rand(9000))
-        
+      
       assert @gandi_domain.domain_ns_add(@sample_domain_name, ['127.0.0.1']).is_a? Integer
     end
     
     should "remove name servers for a domain" do
       @gandi_domain.handler.expects(:call).with("domain_ns_del", @session_id, @sample_domain_name, ['127.0.0.1']).returns(rand(9000))
-        
+      
       assert @gandi_domain.domain_ns_del(@sample_domain_name, ['127.0.0.1']).is_a? Integer
     end
     
     should "set name servers for a domain" do
       @gandi_domain.handler.expects(:call).with("domain_ns_set", @session_id, @sample_domain_name, ['127.0.0.1']).returns(rand(9000))
-        
+      
       assert @gandi_domain.domain_ns_set(@sample_domain_name, ['127.0.0.1']).is_a? Integer
     end
     
     
     should "list hosts for a domain" do
       @gandi_domain.handler.expects(:call).with("host_list", @session_id, @sample_domain_name).returns([])
-        
+      
       assert @gandi_domain.host_list(@sample_domain_name).is_a? Array
     end
     
     should "get IPs for a domain" do
       ips = ['127.0.0.1']
       @gandi_domain.handler.expects(:call).with("host_info", @session_id, @sample_domain_name).returns(ips)
-        
+      
       assert @gandi_domain.host_info(@sample_domain_name).is_a? Array
     end
     
     should "create a glue record for a host when providing multiple IPs" do
       ip_list  = ["1.2.3.4", "1.2.3.5"]
       @gandi_domain.handler.expects(:call).with("host_create", @session_id, @sample_domain_name, ip_list).returns(rand(9000))
-        
+      
       assert @gandi_domain.host_create(@sample_domain_name, ip_list).is_a? Integer
     end
     
     should "create a glue record for a host when providing an unique IP" do
       ip  = "1.2.3.4"
       @gandi_domain.handler.expects(:call).with("host_create", @session_id, @sample_domain_name, [ip]).returns(rand(9000))
-        
+      
       assert @gandi_domain.host_create(@sample_domain_name, ip).is_a? Integer
     end
     
     should "delete a host" do
       @gandi_domain.handler.expects(:call).with("host_delete", @session_id, @sample_domain_name).returns(rand(9000))
-        
+      
       assert @gandi_domain.host_delete(@sample_domain_name).is_a? Integer
     end
     
@@ -201,7 +201,7 @@ class DomainTest < ActiveSupport::TestCase
     should "list redirections for a domain" do
       redirections = [{"type" => "http302", "from" => "w3.example.net", "to" => "http://www.example.net"}]
       @gandi_domain.handler.expects(:call).with("domain_web_redir_list", @session_id, @sample_domain_name).returns(redirections)
-        
+      
       assert_equal redirections, @gandi_domain.domain_web_redir_list(@sample_domain_name)
     end
     
@@ -225,7 +225,7 @@ class DomainTest < ActiveSupport::TestCase
     
     should "delete the redirection on a fqdn" do
       @gandi_domain.handler.expects(:call).with("domain_web_redir_del", @session_id, 'w3.example.net').returns(rand(9000))
-        
+      
       assert @gandi_domain.domain_web_redir_del('w3.example.net').is_a? Integer
     end
     
@@ -260,5 +260,43 @@ class DomainTest < ActiveSupport::TestCase
       assert @gandi_domain.contact_info(handle).is_a? Hash
     end
     
+    
+    should "list operations" do
+      operations = [5555, 5642, 6213]
+      @gandi_domain.handler.expects(:call).with("operation_list", @session_id).returns(operations)
+      
+      assert_equal operations, @gandi_domain.operation_list()
+    end
+    
+    should "list pending operations with a filter" do
+      operations = [5555]
+      filter = {'state' => 'PENDING'}
+      @gandi_domain.handler.expects(:call).with("operation_list", @session_id, filter).returns(operations)
+      
+      assert_equal operations, @gandi_domain.operation_list(filter)
+    end
+    
+    should "get operation details" do
+      opid = 5555
+      details = {}
+      @gandi_domain.handler.expects(:call).with("operation_details", @session_id, opid).returns(details)
+      
+      assert @gandi_domain.operation_details(opid).is_a? Hash
+    end
+    
+    should "relaunch an operation" do
+      opid = 5555
+      param = {'authcode' => 'xxxyyyzzz'}
+      @gandi_domain.handler.expects(:call).with("operation_relaunch", @session_id, opid, param).returns(true)
+      
+      assert @gandi_domain.operation_relaunch(opid, param)
+    end
+    
+    should "cancel an operation" do
+      opid = 5555
+      @gandi_domain.handler.expects(:call).with("operation_cancel", @session_id, opid).returns(true)
+      
+      assert @gandi_domain.operation_cancel(opid)
+    end
   end
 end

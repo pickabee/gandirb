@@ -3,6 +3,7 @@ require File.join(modules_directory, 'domain_modules/name_servers')
 require File.join(modules_directory, 'domain_modules/host')
 require File.join(modules_directory, 'domain_modules/redirection')
 require File.join(modules_directory, 'domain_modules/contact')
+require File.join(modules_directory, 'domain_modules/operations')
 
 module Gandi
   class Domain < Gandi::Base
@@ -129,5 +130,6 @@ module Gandi
     include Gandi::DomainModules::Host
     include Gandi::DomainModules::Redirection
     include Gandi::DomainModules::Contact
+    include Gandi::DomainModules::Operations
   end
 end
