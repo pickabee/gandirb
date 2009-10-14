@@ -229,5 +229,36 @@ class DomainTest < ActiveSupport::TestCase
       assert @gandi_domain.domain_web_redir_del('w3.example.net').is_a? Integer
     end
     
+    
+    should "create a contact" do
+      contact_class, firstname, lastname, address, zipcode, city, country, phone, email = 'individual', 'John', 'Doe', '24 Rue du Pont', '13000', 'Mars', 'France', '+33491909090', 'john@doe.com'
+      @gandi_domain.handler.expects(:call).with("contact_create", @session_id, contact_class, firstname, lastname, address, zipcode, city, country, phone, email).returns('XXXZZ-Gandi')
+      
+      assert_match /.+-Gandi/, @gandi_domain.contact_create(contact_class, firstname, lastname, address, zipcode, city, country, phone, email)
+    end
+    
+    should "update a contact" do
+      handle = 'XXXYY-Gandi'
+      params = {}
+      @gandi_domain.handler.expects(:call).with("contact_update", @session_id, handle, params).returns(rand(9000))
+        
+      assert @gandi_domain.contact_update(handle, params).is_a? Integer
+    end
+    
+    should "delete a contact" do
+      handle = 'XXXYY-Gandi'
+      @gandi_domain.handler.expects(:call).with("contact_del", @session_id, handle).returns(rand(9000))
+        
+      assert @gandi_domain.contact_del(handle).is_a? Integer
+    end
+    
+    should "retrieve infos on a contact" do
+      handle = 'XXXYY-Gandi'
+      infos = {}
+      @gandi_domain.handler.expects(:call).with("contact_info", @session_id, handle).returns(infos)
+        
+      assert @gandi_domain.contact_info(handle).is_a? Hash
+    end
+    
   end
 end
