@@ -1,3 +1,6 @@
+modules_directory = File.expand_path(File.dirname(__FILE__))
+require File.join(modules_directory, 'domain_modules/host')
+
 module Gandi
   class Domain < Gandi::Base
     URL = "https://api.gandi.net/xmlrpc/"
@@ -118,6 +121,8 @@ module Gandi
     def tld_list
       call('tld_list')
     end
+    
+    include Gandi::DomainModules::Host
     
   end
 end
