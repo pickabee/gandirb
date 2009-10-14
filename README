@@ -26,6 +26,7 @@ Detailed RDoc documentation for each method is available using rake rdoc.
 
 * Tests
 * Finish adding and cleaning up domain and mail methods
+* Better handling of failures and server exceptions, and stricter params checking
 * Gemification (with Jeweler)
 
 == Copyright

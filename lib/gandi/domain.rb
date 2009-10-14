@@ -29,7 +29,7 @@ module Gandi
       call('domain_unlock', domain)
     end
     
-    #Retrieve the informations linked to this domain (contacts, nameservers, redirections, weblogs…). 
+    #Retrieve the informations linked to this domain (contacts, nameservers, redirections, weblogs...). 
     #This method only works on domains handled by Gandi.
     #Return a hash with string keys containing domain informations (see API documentation)
     #TODO: convert XMLRPC datetimes ?
@@ -48,7 +48,9 @@ module Gandi
     #Register a domain with Gandi and associate it to a list of contacts.
     #Return the operation attributed ID
     def domain_create(domain, period, owner_handle, admin_handle, tech_handle, billing_handle, nameservers, lang = nil)
-      call('domain_create', domain, period, owner_handle, admin_handle, tech_handle, billing_handle, nameservers, lang)
+      args = [domain, period, owner_handle, admin_handle, tech_handle, billing_handle, nameservers, lang]
+      args.pop if lang.nil?
+      call('domain_create', *args)
     end
     
     #Get a domain out of its redemption period. See glossary, Restore.
@@ -66,7 +68,7 @@ module Gandi
       not_supported
     end
     
-    #Check if a domain can be transfered from another registrar. See glossary, Transfer.
+    #Check if a domain can be transferred from another registrar. See glossary, Transfer.
     def domain_transfer_in_available(domain)
       call('domain_transfer_in_available', domain)
     end
@@ -76,8 +78,11 @@ module Gandi
     #Transfer (see glossary, Transfer) a domain from another registrar to Gandi, or from a Gandi account to a Gandi reseller. 
     #If the domain is already at Gandi (internal transfer), owner_handle, admin_handle, tech_handle and billing_handle are maintained.
     #Return the operation attributed ID
+    #TODO: check for auth_code if TLD is .fr
     def domain_transfer_in(domain, owner_handle, admin_handle, tech_handle, billing_handle, nameservers, auth_code = nil)
-      call('domain_transfer_in', domain, owner_handle, admin_handle, tech_handle, billing_handle, nameservers, auth_code)
+      args = [domain, owner_handle, admin_handle, tech_handle, billing_handle, nameservers, auth_code]
+      args.pop if auth_code.nil?
+      call('domain_transfer_in', *args)
     end
     
     #Accept or deny a transfer of a domain from Gandi to another registrar. See glossary, Transfer.
@@ -104,6 +109,14 @@ module Gandi
     #Return the operation attributed ID
     def domain_change_contact(domain, type, new_contact)
       call('domain_change_contact', domain, type, new_contact)
+    end
+    
+    #Misc methods
+
+    #Return an array of active TLDs handled by the application.
+    #TODO: memoization
+    def tld_list
+      call('tld_list')
     end
     
   end
