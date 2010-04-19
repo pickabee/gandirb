@@ -6,6 +6,9 @@ module Gandi
   class Base
     
     TIMEOUT_EXCEPTIONS = [EOFError, Errno::EPIPE, OpenSSL::SSL::SSLError]
+
+    URL = "https://api.gandi.net/xmlrpc/"
+    TEST_URL = "https://api.ote.gandi.net/xmlrpc/"
     
     attr_reader :session_id, :handler
     

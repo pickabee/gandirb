@@ -4,12 +4,10 @@ require File.join(modules_directory, 'domain_modules/host')
 require File.join(modules_directory, 'domain_modules/redirection')
 require File.join(modules_directory, 'domain_modules/contact')
 require File.join(modules_directory, 'domain_modules/operations')
+require File.join(modules_directory, 'domain_modules/mail')
 
 module Gandi
   class Domain < Gandi::Base
-    URL = "https://api.gandi.net/xmlrpc/"
-    TEST_URL = "https://api.ote.gandi.net/xmlrpc/"
-    
     #Returns an array of domains for which the logged user is the reseller or a contact (owner, administrative, billing or technical).
     #TODO: memoize results 
     def domain_list
@@ -131,5 +129,6 @@ module Gandi
     include Gandi::DomainModules::Redirection
     include Gandi::DomainModules::Contact
     include Gandi::DomainModules::Operations
+    include Gandi::DomainModules::Mail
   end
 end
