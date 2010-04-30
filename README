@@ -1,4 +1,4 @@
-= Gandirb - Ruby lib for using Gandi XML-RPC API
+= Gandirb - Ruby library for using Gandi XML-RPC API
 
 This is a ruby library for using Gandi XML-RPC API.
 It should only support the domain and mail API, but may be extensible enough to add hosting in the future.
