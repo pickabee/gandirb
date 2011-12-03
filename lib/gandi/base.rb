@@ -4,16 +4,15 @@ require 'openssl'
 #Common session, account and call methods
 module Gandi
   class Base
-    
     TIMEOUT_EXCEPTIONS = [EOFError, Errno::EPIPE, OpenSSL::SSL::SSLError]
 
     URL = "https://api.gandi.net/xmlrpc/"
     TEST_URL = "https://api.ote.gandi.net/xmlrpc/"
-    
+
     attr_reader :session_id, :handler
-    
+
     public
-    
+
     def initialize(login, password, uri = nil)
       @login = login
       @password = password
@@ -22,18 +21,18 @@ module Gandi
         begin
           self.class.const_get(:URL)
         rescue NameError
-          raise ArgumentError.new "You must provide an URL when using Gandi::Base directly"
+          raise ArgumentError.new("You must provide an URL when using Gandi::Base directly")
         end
       end
     end
-    
+
     #Calls a RPC method, transparently providing the session id
     def call(method, *arguments)
       raise "You have to log in before using methods requiring a session id" unless logged_in?
       raw_call(method.to_s, @session_id, *arguments)
     end
-    
-    #Instanciates a rpc handler and log in to the interface to retrieve a session id 
+
+    #Instanciates a rpc handler and log in to the interface to retrieve a session id
     def login
       @handler = XMLRPC::Client.new_from_uri(@uri)
       #Get rid of SSL warnings "peer certificate won't be verified in this SSL session"
@@ -44,43 +43,43 @@ module Gandi
       end
       @session_id = raw_call("login", @login, @password, false)
     end
-    
+
     #Gets a new session id by switching to another handle
     def su(handle)
       @session_id = call("su", handle)
     end
-    
+
     #Changes password
     def password(password)
       @password = password
       call("password", password)
     end
-    
-    #Current prepaid account balance 
+
+    #Current prepaid account balance
     def account_balance
       call('account_balance')
     end
-    
+
     #Currency name used with the prepaid account
     def account_currency
       call('account_currency')
     end
-    
+
     def self.login(login, password, uri = nil)
       client = self.new(login, password, uri)
       client.login
       return client
     end
-    
+
     private
-    
+
     #Handle RPC calls and exceptions
     #A reconnection system is used to work around what seems to be a ruby bug :
     #When waiting during 15 seconds between calls, a timeout is reached and the RPC handler starts throwing various exceptions
     #EOFError, Errno::EPIPE, then OpenSSL::SSL::SSLError.
     #When this happens, another handler and another session are created
     #Exceptions are not handled if happening two times consecutively, or during a login call
-    #TODO: This method may be optimized by only creating another handler and keeping the session id. 
+    #TODO: This method may be optimized by only creating another handler and keeping the session id.
     #In this case a server timeout of 12 hours (see the Gandi documentation) may be reached more easily and should be handled.
     def raw_call(*args)
       begin
@@ -106,16 +105,16 @@ module Gandi
         end
       end
     end
-    
+
     def logged_in?
       @session_id.is_a? String
     end
-    
+
     #Raises a NoMethodError exception.
     #Used for methods that are presents in the API but not yet available
     def not_supported
-      raise NoMethodError.new "This method is not supported and will be available in v1.10"
+      raise NoMethodError.new("This method is not supported and will be available in v1.10 of the API")
     end
-    
+
   end
 end

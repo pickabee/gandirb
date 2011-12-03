@@ -5,9 +5,9 @@ module Gandi
       
       #Create a Gandi contact of a given type. See glossary, Account.
       #Return the Gandi handle of the created contact
+      #Note: contact_class argument is used instead of class (due to a ruby keyword conflict)
       #TODO check contact class
       def contact_create(contact_class, firstname, lastname, address, zipcode, city, country, phone, email, params = {})
-        #Note: contact_class argument is used instead of class (due to a ruby keyword conflict)
         args = [contact_class, firstname, lastname, address, zipcode, city, country, phone, email, params]
         args.pop if params.empty?
         

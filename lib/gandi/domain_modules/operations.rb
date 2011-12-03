@@ -1,7 +1,7 @@
 module Gandi
   module DomainModules
     module Operations
-      #Retrieves an array of the last 300 operation IDs matching the optional criterias
+      #Retrieve an array of the last 300 operation IDs matching the optional criterias
       def operation_list(filter = {})
         unless filter.empty?
           call('operation_list', filter)
