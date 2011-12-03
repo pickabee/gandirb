@@ -1,3 +1,6 @@
 .svn
 rdoc
 coverage
+*.gem
+.bundle
+Gemfile.lock
