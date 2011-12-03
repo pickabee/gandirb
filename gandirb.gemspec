@@ -5,6 +5,7 @@ require 'gandi/version'
 Gem::Specification.new do |s|
   s.name = "gandirb"
   s.version = Gandi::VERSION
+  s.platform = Gem::Platform::RUBY
 
   s.authors = ["Pickabee"]
   s.email = ""
@@ -14,16 +15,17 @@ Gem::Specification.new do |s|
   This is a ruby library for using the Gandi XML-RPC API.
   It currently only provides methods for using the domain and mail API, but is extensible enough to add hosting in the future.
   EOL
+  s.rubyforge_project = "gandirb"
 
   s.date = Date.today.strftime('%Y-%m-%d')
 
-  s.files = ["CHANGELOG", "LICENSE", "README.rdoc", "Gemfile", "Rakefile", "lib/gandi.rb", "lib/gandi/base.rb", "lib/gandi/domain.rb", "lib/gandi/domain_modules/contact.rb", "lib/gandi/domain_modules/host.rb", "lib/gandi/domain_modules/mail.rb", "lib/gandi/domain_modules/name_servers.rb", "lib/gandi/domain_modules/operations.rb", "lib/gandi/domain_modules/redirection.rb"]
-  s.test_files = ["test/gandi/domain_test.rb", "test/gandi/base_test.rb", "test/gandi_test.rb", "test/test_helper.rb"]
+  s.files = Dir["CHANGELOG", "LICENSE", "README.rdoc", "Gemfile", "Rakefile", "gandirb.gemspec", "{lib}/**/*.rb"]
+  s.test_files = Dir["{test}/**/*.rb"]
   s.rdoc_options = ["--line-numbers", "--charset=UTF-8", "--title", "Gandirb", "--main", "README.rdoc"]
   s.extra_rdoc_files = %w[CHANGELOG LICENSE]
   s.require_paths = ["lib"]
 
-  s.add_dependency 'activesupport', '>= 2.0'
+  s.add_development_dependency 'activesupport', '>= 2.0'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rdoc'
   s.add_development_dependency 'shoulda', '< 3'
