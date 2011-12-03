@@ -1,1 +1,10 @@
-v1.0. Gem creation
+== 1.1.0
+
+* Fix method Domain#domain_web_redir_add
+* Add ruby 1.9 compatibility
+* Do not use the production URL when none is provided
+* Use bundler for testing and release tasks
+
+== 1.0
+
+* Gem creation
