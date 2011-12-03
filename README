@@ -14,7 +14,7 @@ This lib takes this issue into account and provides a workaround by restarting t
 
 Quick example :
 
-gandi_session = Gandi::Domain.login 'XXYYY-Gandi', 'mypasswd', Gandi::Domain::TEST_URL #omit the last param for real url
+gandi_session = Gandi::Domain.login 'XXYYY-Gandi', 'mypasswd', Gandi::Domain::TEST_URL #or use Gandi::Domain::URL
 gandi_session.account_currency # => "EUR"
 gandi_session.domain_available ["mycoolwebsite.com"] # => {"mycoolwebsite.com"=>true}
 gandi_session.domain_available "mycoolwebsite.com" # => true #rubyfied syntax
@@ -27,7 +27,7 @@ Detailed RDoc documentation for each method is available using rake rdoc.
 * Tests
 * Finish adding and cleaning up domain and mail methods
 * Better handling of failures and server exceptions, and stricter params checking
-* Gemification (with Jeweler)
+* Cleanup gem building process (with Jeweler/Bundler)
 
 == Copyright
 

@@ -17,13 +17,7 @@ module Gandi
       @login = login
       @password = password
       @uri = uri
-      if @uri.nil?
-        begin
-          self.class.const_get(:URL)
-        rescue NameError
-          raise ArgumentError.new("You must provide an URL when using Gandi::Base directly")
-        end
-      end
+      raise ArgumentError.new("You must provide an URL when using Gandi::Base directly") unless @uri
     end
 
     #Calls a RPC method, transparently providing the session id
