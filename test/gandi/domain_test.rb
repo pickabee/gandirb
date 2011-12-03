@@ -28,11 +28,11 @@ class DomainTest < ActiveSupport::TestCase
       end
       
       should "return a hash when providing an array" do
-        assert_equal false, @gandi_domain.domain_available('testdomain.com')
+        assert_equal({"testdomain.com" => false}, @gandi_domain.domain_available(['testdomain.com']))
       end
       
       should "return a boolean when providing a single domain" do
-        assert_equal({"testdomain.com" => false}, @gandi_domain.domain_available(['testdomain.com']))
+        assert_equal false, @gandi_domain.domain_available('testdomain.com')
       end
     end
     
@@ -206,20 +206,19 @@ class DomainTest < ActiveSupport::TestCase
     end
     
     should "check redirection type when adding a redirection for a domain" do
-      fqdn = "w3.example.net"
       destination_url = "http://www.example.net"
       
       calls = states('calls').starts_as('none')
-      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, fqdn, destination_url, 'http302').returns(rand(9000)).when(calls.is('none')).then(calls.is('first'))
-      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, fqdn, destination_url, 'http301').returns(rand(9000)).when(calls.is('first')).then(calls.is('second'))
-      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, fqdn, destination_url, 'cloak').returns(rand(9000)).when(calls.is('second'))
+      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, destination_url, 'http302').returns(rand(9000)).when(calls.is('none')).then(calls.is('first'))
+      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, destination_url, 'http301').returns(rand(9000)).when(calls.is('first')).then(calls.is('second'))
+      @gandi_domain.handler.expects(:call).with("domain_web_redir_add", @session_id, @sample_domain_name, destination_url, 'cloak').returns(rand(9000)).when(calls.is('second'))
       
       Gandi::DomainModules::Redirection::DOMAIN_WEB_REDIR_REDIRECTION_TYPES.each do |type|
-        assert @gandi_domain.domain_web_redir_add(@sample_domain_name, fqdn, destination_url, type).is_a? Integer
+        assert @gandi_domain.domain_web_redir_add(@sample_domain_name, destination_url, type).is_a? Integer
       end
       
       assert_raise ArgumentError do
-        @gandi_domain.domain_web_redir_add(@sample_domain_name, fqdn, destination_url, 'bad')
+        @gandi_domain.domain_web_redir_add(@sample_domain_name, destination_url, 'bad')
       end
     end
     
