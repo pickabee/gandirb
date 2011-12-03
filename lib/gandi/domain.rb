@@ -1,10 +1,9 @@
-modules_directory = File.expand_path(File.dirname(__FILE__))
-require File.join(modules_directory, 'domain_modules/name_servers')
-require File.join(modules_directory, 'domain_modules/host')
-require File.join(modules_directory, 'domain_modules/redirection')
-require File.join(modules_directory, 'domain_modules/contact')
-require File.join(modules_directory, 'domain_modules/operations')
-require File.join(modules_directory, 'domain_modules/mail')
+require 'gandi/domain_modules/name_servers'
+require 'gandi/domain_modules/host'
+require 'gandi/domain_modules/redirection'
+require 'gandi/domain_modules/contact'
+require 'gandi/domain_modules/operations'
+require 'gandi/domain_modules/mail'
 
 module Gandi
   class Domain < Gandi::Base
@@ -18,7 +17,7 @@ module Gandi
     #This implementation does not respect the original API specifications and allow for a single domain to be checked.
     #In this case the domain can be provided as a string and a boolean will be returned.
     def domain_available(domains)
-      available_domains = call('domain_available', domains.to_a)
+      available_domains = call('domain_available', [domains].flatten)
       return (domains.is_a?(String)) ? available_domains.values.first : available_domains
     end
     

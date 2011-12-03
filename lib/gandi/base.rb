@@ -9,6 +9,8 @@ module Gandi
     URL = "https://api.gandi.net/xmlrpc/"
     TEST_URL = "https://api.ote.gandi.net/xmlrpc/"
 
+    SSL_VERIFY_MODE = OpenSSL::SSL::VERIFY_NONE
+
     attr_reader :session_id, :handler
 
     public
@@ -32,8 +34,13 @@ module Gandi
       #Get rid of SSL warnings "peer certificate won't be verified in this SSL session"
       #See http://developer.amazonwebservices.com/connect/thread.jspa?threadID=37139
       #and http://blog.chmouel.com/2008/03/21/ruby-xmlrpc-over-a-self-certified-ssl-with-a-warning/
+      #and http://stackoverflow.com/questions/4748633/how-can-i-make-rubys-xmlrpc-client-ignore-ssl-certificate-errors for ruby 1.9 (which does not set @ssl_context before a request)
       if @handler.instance_variable_get('@http').use_ssl?
-        @handler.instance_variable_get('@http').instance_variable_get("@ssl_context").verify_mode = OpenSSL::SSL::VERIFY_NONE
+        if @handler.instance_variable_get('@http').instance_variable_get("@ssl_context") #Ruby 1.8.7
+          @handler.instance_variable_get('@http').instance_variable_get("@ssl_context").verify_mode = SSL_VERIFY_MODE
+        else
+          @handler.instance_variable_get('@http').instance_variable_set(:@verify_mode, SSL_VERIFY_MODE) #Ruby 1.9
+        end
       end
       @session_id = raw_call("login", @login, @password, false)
     end
