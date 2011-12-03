@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.date = Date.today.strftime('%Y-%m-%d')
 
-  s.files = ["CHANGELOG", "LICENSE", "README.rdoc", "Rakefile", "lib/gandi.rb", "lib/gandi/base.rb", "lib/gandi/domain.rb", "lib/gandi/domain_modules/contact.rb", "lib/gandi/domain_modules/host.rb", "lib/gandi/domain_modules/mail.rb", "lib/gandi/domain_modules/name_servers.rb", "lib/gandi/domain_modules/operations.rb", "lib/gandi/domain_modules/redirection.rb"]
+  s.files = ["CHANGELOG", "LICENSE", "README.rdoc", "Gemfile", "Rakefile", "lib/gandi.rb", "lib/gandi/base.rb", "lib/gandi/domain.rb", "lib/gandi/domain_modules/contact.rb", "lib/gandi/domain_modules/host.rb", "lib/gandi/domain_modules/mail.rb", "lib/gandi/domain_modules/name_servers.rb", "lib/gandi/domain_modules/operations.rb", "lib/gandi/domain_modules/redirection.rb"]
   s.test_files = ["test/gandi/domain_test.rb", "test/gandi/base_test.rb", "test/gandi_test.rb", "test/test_helper.rb"]
   s.rdoc_options = ["--line-numbers", "--charset=UTF-8", "--title", "Gandirb", "--main", "README.rdoc"]
   s.extra_rdoc_files = %w[CHANGELOG LICENSE]
