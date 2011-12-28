@@ -15,11 +15,10 @@ module Gandi
 
     public
 
-    def initialize(login, password, uri = nil)
+    def initialize(login, password, uri)
       @login = login
       @password = password
       @uri = uri
-      raise ArgumentError.new("You must provide an URL when using Gandi::Base directly") unless @uri
     end
 
     #Calls a RPC method, transparently providing the session id
@@ -66,7 +65,7 @@ module Gandi
       call('account_currency')
     end
 
-    def self.login(login, password, uri = nil)
+    def self.login(login, password, uri)
       client = self.new(login, password, uri)
       client.login
       return client
